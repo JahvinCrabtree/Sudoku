@@ -1,5 +1,8 @@
 from pprint import pprint
 
+# Finding the next empty area in the row or column
+# That has not been filled out yet
+# Used -1 as a indicator, to highlight a "blank" area on the grid.
 
 def findNextEmpty(Puzzle):
     for r in range(9):
@@ -8,6 +11,10 @@ def findNextEmpty(Puzzle):
                 return r, c
 
     return None, None
+
+# Basically checks to make sure that the guess
+# Is going to be a valid guess
+# Making sure the guess follows the rules of suodku in the "3x3" grid.
 
 def isValid(Puzzle, guess, row, col):
     rowValues = Puzzle[row]
@@ -27,22 +34,28 @@ def isValid(Puzzle, guess, row, col):
                 return False
     return True
 
-
+# This uses backtracking to solve sudoku
+# And this essentially returns wheter or not
+# It can fine a solution using 
+# True or False and then converts the grid to the solution if possible.
 
 def sudokuSolver(Puzzle):
-    row, col = findNextEmpty(Puzzle)
+    row, col = findNextEmpty(Puzzle)            # Finds an empty area to make a guess.
 
-    if row is None:
-        return True
-
-    for guess in range(1,10): 
-        if isValid(Puzzle, guess, row, col):
-            Puzzle[row][col] = guess
+    if row is None:                             # If there isnt any available rows we're done.
+        return True                             
+                                                # However if there is an empty space make a guess.
+    for guess in range(1,10):                   # Takes a guess in the range of 1-10 (1-9) doesn't include 10.
+        
+        if isValid(Puzzle, guess, row, col):    # Checks if the proposed guess is valid or not.    
+            Puzzle[row][col] = guess            # If the guess is valid, add it to the grid. 
             
-            if sudokuSolver(Puzzle):
+            if sudokuSolver(Puzzle):            # Then call the function again and repeat the process. 
                 return True
     
-        Puzzle[row][col] = -1
+        Puzzle[row][col] = -1                   # If the previous statement doesn't return True, the guess wasn't valid.
+                                                # So the code backtracks and takes a new guess.
+                                                # If it can't make a succesful guess the puzzle is unsolvable. 
     return False
 
 
